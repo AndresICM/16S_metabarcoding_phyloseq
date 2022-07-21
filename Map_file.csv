@@ -1,0 +1,9 @@
+Sample,Original_name,Treatment,Number,Time,TPH,pH,Humidity
+Group_0,BA3T01,Bioaugmentation,1,0,17830.29863,6.97,8.8
+Group_1,BA3T03,Bioaugmentation,2,2,15965.66405,8.42,7.18
+Group_2,BA3T07,Bioaugmentation,3,6,6851.652868,9.17,6.22
+Group_3,BA3T11,Bioaugmentation,4,10,7646.375894,9.28,10.02
+Group_4,LF3T01,Control,1,0,18478.85447,6.9,5
+Group_5,LF3T03,Control,2,2,19130.27379,6.84,6.64
+Group_6,LF3T07,Control,3,6,13256.93642,6.6,3.64
+Group_7,LF3T11,Control,4,10,9246.770358,6.9,5.13
