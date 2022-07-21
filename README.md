@@ -1,5 +1,6 @@
 # 16S_metabarcoding_phyloseq
-#Analysis of Mothur Processed Reads in Rstudio 
+#Analysis of Mothur Processed Reads in RStudio 
+This tutorial was adapted from http://deneflab.github.io/MicrobeMiseq/demos/mothur_2_phyloseq.html
 
 # Introduction
 This tutorial is a continuation of the 16S-rRNA-Metabarcoding-analysis using Mothur. 
@@ -8,8 +9,8 @@ Both treatments were inoculated with a high concentration of diesel before the b
 The fundamental question of the experiment was to observe the bacterial communities' changes across the experiment, and evaluate how they change while the TPH concentration decreases.
 
 #Download Files
-If you already did the "Raw Reads Analysis Tutorial Using Mothur" (https://github.com/AndresICM/16S-rRNA-Metabarcoding-analysis), then you already have two files needed for this tutorial in your "Contis" folder. If so, copy "Contigs/tutorial.an.shared" and "Contigs/tutorial.taxonomy" to your working folder, otherwise download this files from this repository. 
-Additionally, there is file called Map_file.csv. This file is a table with information from each sample. The first column tells us the name that Mothur assigned to each sample, then there is the original name assigned to each sample. Third, the treatment of each sample, if bioaugmentation or control, fourth, a number assigned to each sample for easier graphs. Finally, there is the real time in weeks of when the sample was taken, the Total Petroleum Hydrocarbons (TPH) in ppm, pH and Humidity (%) of each sample.
+If you already did the "Raw Reads Analysis Tutorial Using Mothur" (https://github.com/AndresICM/16S-rRNA-Metabarcoding-analysis), then you already have two files needed for this tutorial in your "Contis" folder. If so, copy "Contigs/tutorial.an.shared" and "Contigs/tutorial.taxonomy" to your working folder, otherwise download these files from this repository. 
+Additionally, there is a file called Map_file.csv. This file is a table with information from each sample. The first column tells us the group that Mothur assigned to each sample, then there is the original name assigned to them; third, the bioremediation strategy of each sample (bioaugmentation or control); fourth, a number assigned to each sample, just to make our lives easier when making graphics. Finally, there is the real time (in weeks) of when the sample was obtained, the Total Petroleum Hydrocarbons (TPH) in ppm, pH and Humidity (%) of each sample.
 
 ```
 Sample,Original_name,Treatment,Number,Time,TPH,pH,Humidity
@@ -22,8 +23,34 @@ Group_5,LF3T03,Control,2,2,19130.27379,6.84,6.64
 Group_6,LF3T07,Control,3,6,13256.93642,6.6,3.64
 Group_7,LF3T11,Control,4,10,9246.770358,6.9,5.13
 ```
+Now we have everything we need to start this tutorial
+
+# Load Libraries
+We will need these R packages to process our 16S rRNA metabarcoding data
+
+library(ggplot2)
+library(vegan)
+library(dplyr)
+library(scales)
+library(grid)
+library(reshape2)
+library(phyloseq)
+library(ggpubr)
+
+# Import Files to RStudio
+
+I will set as a working environment a folder called Tutorial
 
 ```
+setwd("~/Tutorial")
+```
+Then, we can assign some variables for the files that we will use
+
+```
+# Assign variables for imported data
+sharedfile = "Contigs/tutorial.an.shared"
+taxfile = "Contigs/tutorial.taxonomy"
+mapfile = "Map_file.csv"
 ```
 
 ```
