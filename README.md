@@ -104,6 +104,7 @@ Valp
 ```
 # Relative Abundance Histograms
 
+## Phylum level
 Now we have all set to prepare some figures. First, we want to know the composition of the microbial communities of each sample
 
 First, we can start observing the composition at a phylum level. For that we need to group our OTUs by phylum; transform the OTU abundance to relative abundance; we can filter low abundance taxa, and finally sort data alphabetically.
@@ -178,6 +179,8 @@ Now we set the X-axis as Time (weeks), the Y-axis as Relative abundance (Phyla >
 ```
 ggsave("Abundance_Phylum.png", device= "png", width = 20,height = 15, units="cm")
 ```
+![Diagram](Figures/Abundance_Phylum.png "Diagram")
+
 ```
 ```
 ```
