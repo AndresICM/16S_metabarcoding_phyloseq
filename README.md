@@ -181,15 +181,57 @@ ggsave("Abundance_Phylum.png", device= "png", width = 20,height = 15, units="cm"
 ```
 ![Diagram](Figures/Abundance_Phylum.png "Diagram")
 
+## Genus level
+
+We can make histograms for each taxonomic rank we want, but we are going to skip class, order and family levels and go straight to genus. For that, we will repeat the same steps that we did for the phylum level.
+
 ```
+Valp_genus <- Valp %>%
+  tax_glom(taxrank = "Genus") %>%                     # agglomerate at class level
+  transform_sample_counts(function(x) {x/sum(x)} ) %>% # Transform to rel. abundance
+  psmelt() %>%                                         # Melt to long format
+  filter(Abundance > 0.01) %>%                         # Filter out low abundance taxa
+  arrange(Genus)                                      # Sort data frame alphabetically by phylum
 ```
+We can define a color palette. This time we will use the "aaas" color palette
+
 ```
+genus_colors <- get_palette(palette="aaas", 10)
 ```
+And we can now plot
 ```
+ggplot(Valp_genus, aes(x = Number, y = Abundance, fill = Genus)) +
+  geom_bar(stat = "identity", position = "fill") +
+  scale_fill_manual(values = genus_colors) +
+  facet_wrap(~Treatment, ncol=2) +
+  scale_x_discrete(
+    name="Time (weeks)",
+    limits=c("0","2","6","10"))+
+  ylab("Relative Abundance (Genus > 1%) \n") +
+  ggtitle("Genus Composition") 
+    
 ```
+Error: Insufficient values in manual scale. 49 needed but only 10 provided.
 ```
+So, we have an error because we defined only 10 colors in the palette, and we needed 49. So we have to define again our color palette
+
 ```
+genus_colors <- get_palette(palette="aaas", 49)
+
+ggplot(Valp_genus, aes(x = Number, y = Abundance, fill = Genus)) +
+  geom_bar(stat = "identity", position = "fill") +
+  scale_fill_manual(values = genus_colors) +
+  facet_wrap(~Treatment, ncol=2) +
+  scale_x_discrete(
+    name="Time (weeks)",
+    limits=c("0","2","6","10"))+
+  ylab("Relative Abundance (Genus > 1%) \n") +
+  ggtitle("Genus Composition") 
 ```
+ggsave("Abundance_Genus.png", device= "png", width = 50,height = 20, units="cm")
+
 ```
+![Diagram](Figures/Abundance_Genus.png "Diagram")
+
 ```
 ```
