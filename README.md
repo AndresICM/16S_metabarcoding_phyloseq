@@ -211,6 +211,7 @@ ggplot(Valp_genus, aes(x = Number, y = Abundance, fill = Genus)) +
   ggtitle("Genus Composition") 
     
 ```
+```
 Error: Insufficient values in manual scale. 49 needed but only 10 provided.
 ```
 So, we have an error because we defined only 10 colors in the palette, and we needed 49. So we have to define again our color palette
