@@ -137,6 +137,8 @@ ggplot(Valp_phylum, aes(x = Sample, y = Abundance, fill = Phylum)) +
 geom_bar(stat = "identity", position = "fill") +
 scale_fill_manual(values = phylum_colors) 
 ```
+![Diagram](Figures/Histogram_2.jpeg "Diagram")
+
 Now, we can separate the histograms by treatments, bioaugmentation and control. For that, we will use facet_wrap. and specify that we want to group the samples by Treatment in two columns. 
 
 ```
@@ -145,6 +147,8 @@ geom_bar(stat = "identity", position = "fill") +
 scale_fill_manual(values = phylum_colors) +
 facet_wrap(~Treatment, ncol=2)
 ```
+![Diagram](Figures/Histogram_3.jpeg "Diagram")
+
 We can now observe that our histograms do not look good. Since each sample has a different name, facet_wrap assumes that bioaugmentation samples have zero abundance in Group_4-Group_7 and for Control from Group_0-Group_3. 
 To fix that, we will change the x = Sample line and change it to x = Number. This is a number that I assigned to each sample in the map file, according to the weeks they were obtained. 
 
@@ -154,6 +158,8 @@ geom_bar(stat = "identity", position = "fill") +
 scale_fill_manual(values = phylum_colors) +
 facet_wrap(~Treatment, ncol=2)
 ```
+![Diagram](Figures/histogram_4.jpeg "Diagram")
+
 Now it does look better, but we need to make some final arrangements. We can change the X-axis and Y-axis titles set the real time in weeks that the samples were collected and add a title to the histogram.
 
 ```
