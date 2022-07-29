@@ -228,10 +228,9 @@ ggplot(Valp_genus, aes(x = Number, y = Abundance, fill = Genus)) +
   ylab("Relative Abundance (Genus > 1%) \n") +
   ggtitle("Genus Composition") 
 ```
+```
 ggsave("Abundance_Genus.png", device= "png", width = 50,height = 20, units="cm")
 
 ```
 ![Diagram](Figures/Abundance_Genus.png "Diagram")
 
-```
-```
