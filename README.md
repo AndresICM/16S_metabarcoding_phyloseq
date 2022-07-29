@@ -128,6 +128,8 @@ Now we can make a histogram. In this code, we are specifying that the X-axis wil
 ggplot(Valp_phylum, aes(x = Sample, y = Abundance, fill = Phylum)) +
 geom_bar(stat = "identity", position = "fill")
 ```
+![Diagram](Figures/Histogram_1.jpeg "Diagram")
+
 Now we can add the pre-defined color palette
 
 ```
