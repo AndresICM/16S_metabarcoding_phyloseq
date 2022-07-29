@@ -5,7 +5,7 @@ This tutorial was adapted from http://deneflab.github.io/MicrobeMiseq/demos/moth
 # Introduction
 This tutorial is a continuation of the 16S-rRNA-Metabarcoding-analysis using Mothur. 
 Sequences were generated using data from a hydrocarbon bioremediation project. Two treatments were selected for this tutorial, bioaugmentation with *Acinetobacter, Pseudomonas* and *Rhodococcus* strains, and a control. 
-Both treatments were inoculated with a high concentration of diesel before the begining of the experiment and were periodically turned over for aeration. Temperature, pH, total petroleum hydrocarbons (TPH) and other physicochemical parameters were monitored. 
+Both treatments were inoculated with a high concentration of diesel before the beginning of the experiment and were periodically turned over for aeration. Temperature, pH, total petroleum hydrocarbons (TPH) and other physicochemical parameters were monitored. 
 The fundamental question of the experiment was to observe the bacterial communities' changes across the experiment, and evaluate how they change while the TPH concentration decreases.
 
 #Download Files
@@ -64,10 +64,10 @@ mothur_data <- import_mothur(mothur_shared_file = sharedfile,
 map <- read.csv(mapfile)
 map <- sample_data(map)
 ```
-Now to merge the map file with Mothur data, we need that the rownames from the map file matches the sample names in the shared and taxonomy files
+Now to merge the map file with Mothur data, we need that the row names from the map file match the sample names in the shared and taxonomy files
 
 ```
-# Assign rownames to be Sample 
+# Assign row names to be Sample 
 rownames(map) <- map$Sample
 
 # Merge mothurdata object with sample metadata
@@ -81,7 +81,7 @@ colnames(tax_table(moth_merge))
 
 #[1] "Rank1" "Rank2" "Rank3" "Rank4" "Rank5" "Rank6"
 ```
-So, we better assign some taxonomik names to that file and inspect how our column names looks like then
+So, we better assign some taxonomic names to that file and inspect how our column names look like then
 
 ```
 colnames(tax_table(moth_merge)) <- c("Kingdom", "Phylum", "Class", 
@@ -91,7 +91,7 @@ colnames(tax_table(moth_merge))
 
 #[1] "Kingdom" "Phylum"  "Class"   "Order"   "Family"  "Genus"
 ```
-Now we will assign a different name to our phyloseq file, and remove mitochondria and chloroplast OTUs from our files, even though we already have donde that using Mothur
+Now we will assign a different name to our phyloseq file, and remove mitochondria and chloroplast OTUs from our files, even though we already have done that using Mothur
 
 ```
 Valp <- moth_merge %>%
@@ -102,11 +102,83 @@ Valp <- moth_merge %>%
   )
 Valp
 ```
-#
+# Relative Abundance Histograms
 
+Now we have all set to prepare some figures. First, we want to know the composition of the microbial communities of each sample
+
+First, we can start observing the composition at a phylum level. For that we need to group our OTUs by phylum; transform the OTU abundance to relative abundance; we can filter low abundance taxa, and finally sort data alphabetically.
 
 ```
+Valp_phylum <- Valp %>%
+  tax_glom(taxrank = "Phylum") %>%                     # agglomerate at phylum level
+  transform_sample_counts(function(x) {x/sum(x)} ) %>% # Transform to rel. abundance
+  psmelt() %>%                                         # Melt to long format
+  filter(Abundance > 0.01) %>%                         # Filter out low abundance taxa
+  arrange(Phylum)                                      # Sort data frame alphabetically by phylum
+```
+If we want, we can define a color palette for our histogram (some color palettes can be observed https://nanx.me/ggsci/articles/ggsci.html ) 
+Here we defined we want to use the "jco" color palette, and that we want 10 different colors.
+```
+phylum_colors <- get_palette(palette="jco", 10)
 ```
 
+Now we can make a histogram. In this code, we are specifying that the X-axis will be the samples, Y-axis the abundance and that it should fill the histograms by phylum.
+
+```
+ggplot(Valp_phylum, aes(x = Sample, y = Abundance, fill = Phylum)) +
+geom_bar(stat = "identity", position = "fill")
+```
+Now we can add the pre-defined color palette
+
+```
+ggplot(Valp_phylum, aes(x = Sample, y = Abundance, fill = Phylum)) +
+geom_bar(stat = "identity", position = "fill") +
+scale_fill_manual(values = phylum_colors) 
+```
+Now, we can separate the histograms by treatments, bioaugmentation and control. For that, we will use facet_wrap. and specify that we want to group the samples by Treatment in two columns. 
+
+```
+ggplot(Valp_phylum, aes(x = Sample, y = Abundance, fill = Phylum)) +
+geom_bar(stat = "identity", position = "fill") +
+scale_fill_manual(values = phylum_colors) +
+facet_wrap(~Treatment, ncol=2)
+```
+We can now observe that our histograms do not look good. Since each sample has a different name, facet_wrap assumes that bioaugmentation samples have zero abundance in Group_4-Group_7 and for Control from Group_0-Group_3. 
+To fix that, we will change the x = Sample line and change it to x = Number. This is a number that I assigned to each sample in the map file, according to the weeks they were obtained. 
+
+```
+ggplot(Valp_phylum, aes(x = Number, y = Abundance, fill = Phylum)) +
+geom_bar(stat = "identity", position = "fill") +
+scale_fill_manual(values = phylum_colors) +
+facet_wrap(~Treatment, ncol=2)
+```
+Now it does look better, but we need to make some final arrangements. We can change the X-axis and Y-axis titles set the real time in weeks that the samples were collected and add a title to the histogram.
+
+```
+ggplot(Valp_phylum, aes(x = Number, y = Abundance, fill = Phylum)) +
+geom_bar(stat = "identity", position = "fill") +
+scale_fill_manual(values = phylum_colors) +
+facet_wrap(~Treatment, ncol=2) +
+scale_x_discrete(
+  name="Time (weeks)",
+  limits=c("0","2","6","10"))+
+ylab("Relative Abundance (Phyla > 1%) \n") +
+ggtitle("Phylum Composition") 
+```
+Now we set the X-axis as Time (weeks), the Y-axis as Relative abundance (Phyla >1%) and a title that specifies that we are observing the Phylum composition. Now we just want to save our figure. 
+
+```
+ggsave("Abundance_Phylum.png", device= "png", width = 20,height = 15, units="cm")
+```
+```
+```
+```
+```
+```
+```
+```
+```
+```
+```
 ```
 ```
