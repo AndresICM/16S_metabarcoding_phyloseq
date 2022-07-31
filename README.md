@@ -263,7 +263,7 @@ ggsave("Diversity_rarefied_v2.png", device= "png", width = 50,height = 20, units
 ![Diagram](Figures/Diversity_rarefied_v2.png "Diagram")
 
 
-# Rarefaction Curves
+## Rarefaction Curves
 
 To create rarefaction curves, first, we need to read the rarefaction file created from Mothur
 
@@ -310,6 +310,47 @@ ggplot(data=long_rarefaction_data,
 ggsave("Rarefaction_curve.png", device= "png", width = 40,height = 20, units="cm")
 ```
 ![Diagram](Figures/Rarefaction_curve.png "Diagram")
+
+## Beta Diversity
+
+###PCoA
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
 ```
 ```
 
