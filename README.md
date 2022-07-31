@@ -313,7 +313,7 @@ ggsave("Rarefaction_curve.png", device= "png", width = 40,height = 20, units="cm
 
 ## Beta Diversity
 
-###PCoA
+### PCoA
 
 ```
 ```
