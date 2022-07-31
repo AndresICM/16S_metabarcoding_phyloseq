@@ -346,38 +346,80 @@ ggsave("PCoA.png", device= "png", width = 30,height = 20, units="cm")
 ```
 ![Diagram](Figures/PCoA.png "Diagram")
 
-```
-```
+### CAP
+
+Now we want to make a Canonical Analysis of Principal coordinates (CAP). This analysis allows to add environmenta variables into the ordination.
+First, we are going to assign the Bray Curtis distance into a variable. Then, we are going to make the ordination. 
 
 ```
+bray_not_na <- phyloseq::distance(physeq=Valp_scale, method="bray")
+
+#CAP ordinate
+cap_ord <- ordinate(
+  physeq=Valp_scale,
+  method="CAP",
+  distance= bray_not_na,
+  formula= ~ TPH + pH + Humidity)
 ```
+Then, we can plot this. However, to later add some vectors with pH, Humidity and TPH information, we are going to assign a variable to the plot. 
 
 ```
+#CAP plot
+cap_plot <- plot_ordination(
+  physeq= Valp_scale,
+  ordination=cap_ord,
+  color="Time",
+  axes=c(1,2))+
+  aes(shape=Treatment)+
+  geom_point(size=5)
 ```
 
-```
-```
+![Diagram](Figures/CAP_v1.png "Diagram")
+
+Now, we want to add the vectors as arrows to this plot. First, we are going to assign the environmental variables as arrows, and then define the arrow aesthetics.
 
 ```
+#Add environmental variables as arrows
+arrowmat <- vegan::scores(cap_ord, display="bp")
+
+#Add labels, make a data frame
+arrowdf <- data.frame(labels=rownames(arrowmat), arrowmat)
+
+#Define arrow aesthetic mapping
+arrow_map <- aes(xend=CAP1,
+                 yend=CAP2,
+                 x=0,
+                 y=0,
+                 shape=NULL,
+                 color=NULL,
+                 label=labels)
+label_map <- aes(x=1.3*CAP1,
+                 y=1.3*CAP2,
+                 shape=NULL,
+                 color=NULL,
+                 label=labels)
+arrowhead=arrow(length=unit(0.02,"npc"))
 ```
+Now we can add these arrows to the plot.
 
 ```
-```
+cap_plot+
+  geom_segment(
+    mapping = arrow_map,
+    title="CAP",
+    size=.5,
+    data=arrowdf,
+    color="gray",
+    arrow=arrowhead
+  )+
+  geom_text(
+    mapping=label_map,
+    size=4,
+    data=arrowdf,
+    show.legend = FALSE
+  )
 
+ggsave("CAP.png", device= "png", width = 30,height = 20, units="cm")
 ```
-```
+![Diagram](Figures/CAP_v2.png "Diagram")
 
-```
-```
-
-```
-```
-
-```
-```
-
-```
-```
-
-```
-```
