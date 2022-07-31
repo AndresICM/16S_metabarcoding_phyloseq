@@ -235,3 +235,49 @@ ggsave("Abundance_Genus.png", device= "png", width = 50,height = 20, units="cm")
 ```
 ![Diagram](Figures/Abundance_Genus.png "Diagram")
 
+## Alpha diversity
+
+First we are going to rarefy all samples to an even depth.
+
+```
+min_lib <- min(sample_sums(Valp))
+Valp_r <- rarefy_even_depth(Valp, sample.size = min_lib, verbose = FALSE, replace = TRUE)
+```
+
+Then we can graph de diversity with plot_richness. This will create graphics with several alpha diversity indicators (Observed, Chao, ACE, Shannon, Simpson, InvSimpson and Fisher)
+
+```
+p <- plot_richness(Valp_r, "Number","Treatment") 
+```
+![Diagram](Figures/Diversity_rarefied_v1.png "Diagram")
+
+We created a plot where the X-axis is the number of each sample, and is colored by treatment. Now we can correct the Y-axis name and save it.
+
+```
+ p + scale_x_discrete(
+      name="Time (weeks)",
+      limits=c("0","2","6","10")) 
+
+ggsave("Diversity_rarefied_v2.png", device= "png", width = 50,height = 20, units="cm")
+```
+![Diagram](Figures/Diversity_rarefied_v2.png "Diagram")
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
+
+```
+```
