@@ -237,14 +237,14 @@ ggsave("Abundance_Genus.png", device= "png", width = 50,height = 20, units="cm")
 
 ## Alpha diversity
 
-First we are going to rarefy all samples to an even depth.
+First, we are going to rarefy all samples to an even depth.
 
 ```
 min_lib <- min(sample_sums(Valp))
 Valp_r <- rarefy_even_depth(Valp, sample.size = min_lib, verbose = FALSE, replace = TRUE)
 ```
 
-Then we can graph de diversity with plot_richness. This will create graphics with several alpha diversity indicators (Observed, Chao, ACE, Shannon, Simpson, InvSimpson and Fisher)
+Then, we can graph de diversity with plot_richness. This will create graphics with several alpha diversity indicators (Observed, Chao, ACE, Shannon, Simpson, InvSimpson and Fisher)
 
 ```
 p <- plot_richness(Valp_r, "Number","Treatment") 
@@ -261,21 +261,55 @@ We created a plot where the X-axis is the number of each sample, and is colored 
 ggsave("Diversity_rarefied_v2.png", device= "png", width = 50,height = 20, units="cm")
 ```
 ![Diagram](Figures/Diversity_rarefied_v2.png "Diagram")
-```
-```
+
+
+# Rarefaction Curves
+
+To create rarefaction curves, first, we need to read the rarefaction file created from Mothur
 
 ```
+rarefaction <- read.table("tutorial.an.groups.rarefaction", header=TRUE)
+rarefaction
 ```
+This file needs some editing, so we are going to take only the columns with "unique" on them, and change the column names to match the names of the samples.
 
 ```
+#Take only the columns with "unique" on them
+rarefaction_columns <- rarefaction[grepl("unique", names(rarefaction))]
+
+#Change column names
+colnames(rarefaction_columns) <- map$Original_name
 ```
+Now we have a file with the right column names and the OTUs abundance observed in each sample. However, we are missing the information on the number of reads. Therefore, we are going to take that information from the original file and merge it with our rarefaction_columns file
 
 ```
+#take numsampled column
+numSampled <- rarefaction[,c("numsampled")]
+
+#Combine numsampled with 
+rarefaction_data <- cbind(numSampled,rarefaction_columns)
 ```
+Before plotting, we need to transform this data into long format
 
 ```
+#transform data to long form
+long_rarefaction_data <- melt(rarefaction_data, id.vars="numSampled")
 ```
+Now we can make the rarefaction curves. We are using as X-axis the number of reads and the Y-axis the number of observed OTUs.
 
+```
+ggplot(data=long_rarefaction_data,
+  aes(x=numSampled, y=value, color=variable))+
+  geom_line()+
+  ggtitle("Rarefaction curve")+
+  labs(x="Sample size", y="Number of OTUs")+
+  guides(color=guide_legend("Samples", ncol=1))+
+  theme_bw() + theme(panel.border=element_blank(), panel.grid.major = element_blank(), plot.title= element_text(hjust=0.5),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour="black"))
+
+ggsave("Rarefaction_curve.png", device= "png", width = 40,height = 20, units="cm")
+```
+![Diagram](Figures/Rarefaction_curve.png "Diagram")
 ```
 ```
 
