@@ -315,11 +315,36 @@ ggsave("Rarefaction_curve.png", device= "png", width = 40,height = 20, units="cm
 
 ### PCoA
 
-```
-```
+Now, we want to compare the diversity between samples. This could be done using ordination analysis like a Principal coordinates analysis (PCoA), which attempts to summarise and represent dissimilarities between objects in a low-dimensional space (2D or 3D). 
+
+To make a PCoA analysis, first, we are going to rename our original file. Later we will ordinate our file by PCoA method, and using Bray Curtis algorithm to calculate distances between each sample.  
 
 ```
+Valp_scale <- Valp
+
+#ordinate
+Valp_pcoa <- ordinate(
+  physeq=Valp_scale,
+  method="PCoA",
+  distance="bray")
 ```
+Now we can plot this
+
+```
+#plot
+plot_ordination(
+  physeq=Valp_scale,
+  ordination=Valp_pcoa,
+  shape ="Treatment",
+  color = "Time",
+  title="PCoA") +
+  geom_point(size=5) +
+  theme(plot.title= element_text(hjust=0.5)) 
+
+ggsave("PCoA.png", device= "png", width = 30,height = 20, units="cm")
+
+```
+![Diagram](Figures/PCoA.png "Diagram")
 
 ```
 ```
