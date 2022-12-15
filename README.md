@@ -1,5 +1,5 @@
 # 16S_metabarcoding_phyloseq
-#Analysis of Mothur Processed Reads in RStudio 
+Analysis of Mothur pre-processed Reads in RStudio 
 This tutorial was adapted from http://deneflab.github.io/MicrobeMiseq/demos/mothur_2_phyloseq.html
 
 # Introduction
